@@ -9,7 +9,7 @@ const logger = (req, res, next) => {
   next();
 };
 
-// app.use(express.json);
+app.use(express.json());
 app.use(logger);
 
 app.listen(PORT, () => {
@@ -48,4 +48,28 @@ app.get('/api/books', (req, res) => {
 app.get('/api/books/:id', (req, res) => {
   const { id } = req.params;
   res.send(books[id - 1]);
+});
+
+app.post('/api/books', (req, res) => {
+  const newBook = req.body;
+  const id = books.length + 1;
+  newBook.id = id;
+  books.push(newBook);
+  res.send(newBook);
+});
+
+app.put('/api/books/:id', (req, res) => {
+  const { id } = req.params;
+  const updatedBook = req.body;
+  books.splice(id - 1, 1);
+  updatedBook.id = id;
+  books.push(updatedBook);
+  res.send(updatedBook);
+});
+
+app.delete('/api/books/:id', (req, res) => {
+  const { id } = req.params;
+  const deletedBook = books[id - 1];
+  books.splice(id - 1, 1);
+  res.send(deletedBook);
 });
