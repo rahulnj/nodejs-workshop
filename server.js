@@ -1,8 +1,9 @@
+require('dotenv').config();
 const express = require('express');
 
 const app = express();
 
-const PORT = 8080;
+const PORT = process.env.PORT;
 
 const logger = (req, res, next) => {
   console.log(`Recieved ${req.method} on ${req.url}`);
