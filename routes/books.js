@@ -1,42 +1,23 @@
 const express = require('express');
 const router = express.Router();
 
-const books = [
-  {
-    id: 1,
-    title: 'Harry Potter and the Chamber of Secrets',
-    author: 'J.K. Rowling',
-    year: 1998,
-    pages: 251,
-    publisher: 'Bloomsbury',
-    language: 'English',
-  },
-  {
-    id: 2,
-    title: 'Clean Code',
-    author: 'Some other author',
-    year: 1999,
-    pages: 317,
-    publisher: 'Bloomsbury',
-    language: 'English',
-  },
-];
+const Book = require('../models/book');
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+  const books = await Book.find();
   res.send(books);
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   const { id } = req.params;
-  res.send(books[id - 1]);
+  const book = await Book.findById(id);
+  res.send(book);
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const newBook = req.body;
-  const id = books.length + 1;
-  newBook.id = id;
-  books.push(newBook);
-  res.send(newBook);
+  const dbBook = await Book.create(newBook);
+  res.send(dbBook);
 });
 
 router.put('/:id', (req, res) => {
